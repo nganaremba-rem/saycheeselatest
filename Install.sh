@@ -1,9 +1,13 @@
 echo "Press 1 for Phone or Press 2 for Computer"
 read -r device
 if [ $device == "1" ]; then
-apt install git
+apt install git -y
+apt install httrack -y
+apt install php -y
 elif [ $device == "2" ]; then
-sudo apt install git
+sudo apt install git -y
+sudo apt install httrack -y
+sudo apt install php -y
 else
 exit 1
 fi
