@@ -176,8 +176,8 @@ exit 1
 fi
 
 # ? if link exist
-printf "\e[1;92m[\e[0m+\e[1;92m] Share \e[0m\e[1;77mHTTPS\e[0m\e[1;92mBitly link:\e[0m\e[1;77m %s\e[0m\n" $bitly_link
-printf "\e[1;92m[\e[0m+\e[1;92m] Share \e[0m\e[1;77mHTTPS\e[0m\e[1;92m link:\e[0m\e[1;77m %s\e[0m\n" $link
+printf "\n\e[1;92m[\e[0m+\e[1;92m] Share \e[0m\e[1;77mHTTPS\e[0m\e[1;92m Bitly link:\e[0m\e[1;77m %s\e[0m\n" $bitly_link
+printf "\n\e[1;92m[\e[0m+\e[1;92m] Share \e[0m\e[1;77mHTTPS\e[0m\e[1;92m link:\e[0m\e[1;77m %s\e[0m\n" $link
 
 }
 
